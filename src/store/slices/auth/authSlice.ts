@@ -8,7 +8,7 @@ import { AppThunk, RootState } from "../../../store/";
 
 export interface AuthState {
   usuario: IUsuario | null,
-  checking: boolean,
+ 
   error: string | null;
   
   status: 'checking' | 'authenticated' | 'not-authenticated';
@@ -26,7 +26,7 @@ usuario:  idUsuario: 1,
 
 const initialState: AuthState = {
   usuario: null,
-  checking: true,
+ 
   error: null,
   status: "checking"
  

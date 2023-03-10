@@ -123,7 +123,7 @@ export const HeaderSidebar: FC<Props> = () => {
                 {usuario!.nombre}
               </Typography>
               <Typography variant="subtitle1" noWrap>
-                {user.jobtitle}
+                {usuario!.email}
               </Typography>
             </Box>
             <IconButton onClick={handleOpen} sx={{ p: 1 }} size="small" color="primary">
@@ -180,7 +180,7 @@ export const HeaderSidebar: FC<Props> = () => {
             </Popover>
 
           </Box>
-            <FormControlLabel
+            {/* <FormControlLabel
               control={
                 <Switch
                   checked={state.invisible}
@@ -190,7 +190,7 @@ export const HeaderSidebar: FC<Props> = () => {
                 />
               }
               label="Invisible"
-            />
+            /> */}
         </Box>
       </Box>
     </>

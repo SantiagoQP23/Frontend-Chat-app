@@ -100,7 +100,7 @@ export const BottomBarContent = () => {
         />
         <MessageInputWrapper
           autoFocus
-          placeholder="Write your message here..."
+          placeholder="Escribe tu mensaje aquí"
           fullWidth
           value={mensaje}
           onChange={onChange}

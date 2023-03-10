@@ -69,11 +69,11 @@ export const ChatSelect = () => {
           >
             <Container maxWidth="sm">
               <Box textAlign="center">
-                <img
+                {/* <img
                   alt="500"
                   height={260}
                   src="/static/images/status/500.svg"
-                />
+                /> */}
                 <Typography variant="h2" sx={{ my: 2 }}>
                   Chat App
                 </Typography>

@@ -100,12 +100,7 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
 
   const dispatch = useAppDispatch();
 
-  const user =
-  {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg',
-    jobtitle: 'Software Developer'
-  };
+
 
   const [state, setState] = useState({
     invisible: true
@@ -120,12 +115,12 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
     });
   };
 
-  const [currentTab, setCurrentTab] = useState<string>('all');
+  const [currentTab, setCurrentTab] = useState<string>('todo');
 
   const tabs = [
-    { value: 'all', label: 'All' },
-    { value: 'unread', label: 'Unread' },
-    { value: 'archived', label: 'Archived' }
+    { value: 'todo', label: 'Todos' },
+    // { value: 'unread', label: 'Unread' },
+    // { value: 'archived', label: 'Archived' }
   ];
 
   const handleTabsChange = (event: ChangeEvent<{}>, value: string): void => {
@@ -142,7 +137,7 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
     <RootWrapper>
       <HeaderSidebar />
 
-      <TextField
+      {/* <TextField
         sx={{ mt: 2, mb: 1 }}
         size="small"
         fullWidth
@@ -154,7 +149,7 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
           )
         }}
         placeholder="Search..."
-      />
+      /> */}
 
       <Typography sx={{ mb: 1, mt: 2 }} variant="h3">
         Chats
@@ -177,7 +172,7 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
 
       <Box mt={2}>
 
-        {currentTab === 'all' && (
+        {currentTab === 'todo' && (
           <>
             <List disablePadding component="div">
               {
@@ -205,21 +200,21 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
                     <ListItemText
                       primaryTypographyProps={{
                         fontSize: '12px',
-                       align: 'right'
+                        align: 'right'
                       }}
                       secondaryTypographyProps={{
-                       align: 'right'
+                        align: 'right'
                       }}
 
                       primary={
-                        u.mensaje._id 
-                        ? 
-                          isToday(new Date(u.mensaje?.createdAt)) 
-                          ? format(new Date(u.mensaje?.createdAt), 'HH:mm') 
-                          : format(new Date(u.mensaje?.createdAt), 'dd MMM yyyy') 
-                          
-                        : '' 
-                        }
+                        u.mensaje._id
+                          ?
+                          isToday(new Date(u.mensaje?.createdAt))
+                            ? format(new Date(u.mensaje?.createdAt), 'HH:mm')
+                            : format(new Date(u.mensaje?.createdAt), 'dd MMM yyyy')
+
+                          : ''
+                      }
 
                       secondary={u.cantidadMensajes > 0 && <Label color="success" >
                         <b>{u.cantidadMensajes}</b>
@@ -292,118 +287,13 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
           </Box>
         )}
       </Box>
-      <Box display="flex" pb={1} mt={4} alignItems="center">
-        <Typography sx={{ mr: 1 }} variant="h3">
-          Meetings
-        </Typography>
-        <Label color="success">
-          <b>2</b>
-        </Label>
+
+
+      <Box sx={{ mt: 3, mb: 2 }}>
+        <Typography variant="h5" align='center'>Desarrollado por Santiago Quirumbay</Typography>
+
       </Box>
-      <MeetingBox>
-        <Typography variant="h4">Daily Design Meeting</Typography>
 
-        <Box py={3} display="flex" alignItems="flex-start">
-          <AlarmTwoToneIcon />
-          <Box pl={1}>
-            <Typography
-              variant="subtitle2"
-              sx={{ lineHeight: 1 }}
-              color="text.primary"
-            >
-              10:00 - 11:30
-            </Typography>
-            <Typography variant="subtitle1">
-              {formatDistance(subMinutes(new Date(), 12), new Date(), {
-                addSuffix: true
-              })}
-            </Typography>
-          </Box>
-        </Box>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <AvatarGroup>
-            <Tooltip arrow title="View profile for Remy Sharp">
-              <Avatar
-                sx={{ width: 28, height: 28 }}
-                component={RouterLink}
-                to="#"
-                alt="Remy Sharp"
-                src="/static/images/avatars/1.jpg"
-              />
-            </Tooltip>
-            <Tooltip arrow title="View profile for Travis Howard">
-              <Avatar
-                sx={{ width: 28, height: 28 }}
-                component={RouterLink}
-                to="#"
-                alt="Travis Howard"
-                src="/static/images/avatars/2.jpg"
-              />
-            </Tooltip>
-            <Tooltip arrow title="View profile for Craig Vaccaro">
-              <Avatar
-                sx={{ width: 28, height: 28 }}
-                component={RouterLink}
-                to="#"
-                alt="Craig Vaccaro"
-                src="/static/images/avatars/1.jpg"
-              />
-            </Tooltip>
-          </AvatarGroup>
-
-          <Button variant="contained" size="small">
-            Attend
-          </Button>
-        </Box>
-      </MeetingBox>
-
-      <MeetingBox>
-        <Typography variant="h4">Investors Council Meeting</Typography>
-
-        <Box py={3} display="flex" alignItems="flex-start">
-          <AlarmTwoToneIcon />
-          <Box pl={1}>
-            <Typography
-              variant="subtitle2"
-              sx={{ lineHeight: 1 }}
-              color="text.primary"
-            >
-              14:30 - 16:15
-            </Typography>
-            <Typography variant="subtitle1">
-              {formatDistance(subHours(new Date(), 4), new Date(), {
-                addSuffix: true
-              })}
-            </Typography>
-          </Box>
-        </Box>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <AvatarGroup>
-            <Tooltip arrow title="View profile for Travis Howard">
-              <Avatar
-                sx={{ width: 28, height: 28 }}
-                component={RouterLink}
-                to="#"
-                alt="Travis Howard"
-                src="/static/images/avatars/4.jpg"
-              />
-            </Tooltip>
-            <Tooltip arrow title="View profile for Craig Vaccaro">
-              <Avatar
-                sx={{ width: 28, height: 28 }}
-                component={RouterLink}
-                to="#"
-                alt="Craig Vaccaro"
-                src="/static/images/avatars/5.jpg"
-              />
-            </Tooltip>
-          </AvatarGroup>
-
-          <Button variant="contained" size="small">
-            Attend
-          </Button>
-        </Box>
-      </MeetingBox>
     </RootWrapper >
   );
 }

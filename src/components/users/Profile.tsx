@@ -85,7 +85,7 @@ const CardCoverAction = styled(Box)(
 
 export const Profile = () => {
 
-  const {usuario} = useAuthStore();
+  const { usuario } = useAuthStore();
 
   const dispatch = useAppDispatch();
 
@@ -101,12 +101,12 @@ export const Profile = () => {
     followers: '465'
   };
 
-  const onFileInputChange = ({target}: ChangeEvent<HTMLInputElement>) => {
+  const onFileInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
 
-    if(target.files?.length === 0) return;
+    if (target.files?.length === 0) return;
 
 
-    dispatch( startUploadingFile(target.files!));
+    dispatch(startUploadingFile(target.files!));
   }
 
   return (
@@ -119,17 +119,17 @@ export const Profile = () => {
         </Tooltip>
         <Box>
           <Typography variant="h3" component="h3" gutterBottom>
-            Profile for {usuario!.nombre}
+            {usuario!.nombre}
           </Typography>
           <Typography variant="subtitle2">
-            This is a profile page. Easy to modify, always blazing fast
+            {usuario!.email}
           </Typography>
         </Box>
       </Box>
       <Container maxWidth="lg">
 
         <CardCover>
-          <CardMedia  />
+          <CardMedia />
           <CardCoverAction>
             <Input accept="image/*" id="change-cover" multiple type="file" />
             <label htmlFor="change-cover">
@@ -164,11 +164,9 @@ export const Profile = () => {
           <Typography gutterBottom variant="h4">
             {usuario!.nombre}
           </Typography>
-          <Typography variant="subtitle2">{user.description}</Typography>
-          <Typography sx={{ py: 2 }} variant="subtitle2" color="text.primary">
-            {user.jobtitle} | {user.location} | {user.followers} followers
-          </Typography>
-          <Box
+          <Typography variant="subtitle2">{usuario!.email}</Typography>
+         
+          {/* <Box
             display={{ xs: 'block', md: 'flex' }}
             alignItems="center"
             justifyContent="space-between"
@@ -192,7 +190,7 @@ export const Profile = () => {
             >
               See all {user.followers} connections
             </Button>
-          </Box>
+          </Box> */}
         </Box>
       </Container>
     </>

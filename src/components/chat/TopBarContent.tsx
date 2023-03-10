@@ -31,6 +31,7 @@ import WarningTwoToneIcon from '@mui/icons-material/WarningTwoTone';
 import DescriptionTwoToneIcon from '@mui/icons-material/DescriptionTwoTone';
 import { useAppSelector } from '../../hooks/useRedux';
 import { selectChat } from '../../store/slices/chat';
+import { es } from 'date-fns/locale';
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -108,54 +109,63 @@ export const TopBarContent = () => {
   return (
     <>
       <RootWrapper>
-        <Box display="flex" alignItems="center">
-          <Avatar
-            variant="rounded"
-            sx={{ width: 48, height: 48 }}
-            alt={chatActivo?.nombre}
-            src={chatActivo?.avatar}
-          />
-          <Box ml={1}>
-            <Typography variant="h4" gutterBottom>
-              {chatActivo?.nombre}
-            </Typography>
-            <Typography variant="subtitle2">
-              {
-               
-                chatActivo?.online 
-                ? 'online' 
-                :
-                  chatActivo?.lastConnection
-                    ? 'Active ' + formatDistance(subMinutes(new Date(chatActivo?.lastConnection || ''), 0), new Date(), {
-                      addSuffix: true
-                    })
-                    : ''
-              }
-            </Typography>
-          </Box>
-        </Box>
-        <Box
-          sx={{
-            //display: 'inline-block'
-            display: { xs: 'none', lg: 'flex' }
-          }}
-        >
-          <Tooltip placement="bottom" title="Start a voice call">
-            <IconButton color="primary">
-              <CallTwoToneIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip placement="bottom" title="Start a video call">
-            <IconButton color="primary">
-              <VideoCameraFrontTwoToneIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip placement="bottom" title="Conversation information">
-            <IconButton color="primary" onClick={handleDrawerToggle}>
-              <InfoTwoToneIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        {
+          chatActivo ?
+
+            <>
+
+              <Box display="flex" alignItems="center">
+                <Avatar
+                  variant="rounded"
+                  sx={{ width: 48, height: 48 }}
+                  alt={chatActivo?.nombre}
+                  src={chatActivo?.avatar}
+                />
+                <Box ml={1}>
+                  <Typography variant="h4" gutterBottom>
+                    {chatActivo?.nombre}
+                  </Typography>
+                  <Typography variant="subtitle2">
+                    {
+
+                      chatActivo?.online
+                        ? 'online'
+                        :
+                        chatActivo?.lastConnection
+                          ? 'Active ' + formatDistance(subMinutes(new Date(chatActivo?.lastConnection || ''), 0), new Date(), {
+                            addSuffix: true
+                          })
+                          : ''
+                    }
+                  </Typography>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  //display: 'inline-block'
+                  display: { xs: 'none', lg: 'flex' }
+                }}
+              >
+                <Tooltip placement="bottom" title="Start a voice call. Coming soon.">
+                  <IconButton color="primary" >
+                    <CallTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip placement="bottom" title="Start a video call. Coming soon.">
+                  <IconButton color="primary">
+                    <VideoCameraFrontTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip placement="bottom" title="Conversation information">
+                  <IconButton color="primary" onClick={handleDrawerToggle}>
+                    <InfoTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </>
+            : <Typography variant="h4" >Chat App</Typography>
+        }
+
       </RootWrapper>
       <Drawer
         sx={{
@@ -180,21 +190,24 @@ export const TopBarContent = () => {
               alt={chatActivo?.nombre}
               src={chatActivo?.avatar}
             />
-            <Typography variant="h4">{chatActivo?.nombre}</Typography>
-            <Typography variant="subtitle2">
-              {   chatActivo?.online 
-                ? 'online' 
+            <Typography variant="h3">{chatActivo?.nombre}</Typography>
+            <Typography variant="h6">{chatActivo?.email}</Typography>
+            
+            <Typography variant="body1">
+              {chatActivo?.online
+                ? 'online'
                 :
-                  chatActivo?.lastConnection
-                    ? 'Active ' + formatDistance(subMinutes(new Date(chatActivo?.lastConnection || ''), 0), new Date(), {
-                      addSuffix: true
-                    })
-                    : ''}
+                chatActivo?.lastConnection
+                  ? 'Activo ' + formatDistance(subMinutes(new Date(chatActivo?.lastConnection || ''), 0), new Date(), {
+                    addSuffix: true,
+                    locale: es
+                  })
+                  : ''}
             </Typography>
           </Box>
           <Divider sx={{ my: 3 }} />
 
-          <Accordion
+          {/* <Accordion
             expanded={expanded === 'section1'}
             onChange={handleChange('section1')}
           >
@@ -327,9 +340,10 @@ export const TopBarContent = () => {
                 </ListItem>
               </List>
             </AccordionDetails>
-          </Accordion>
+          </Accordion> */}
         </Box>
       </Drawer>
+
     </>
   );
 }
