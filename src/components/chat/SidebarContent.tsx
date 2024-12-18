@@ -1,27 +1,51 @@
-import { useState, ChangeEvent, useRef, FC } from 'react';
+import { useState, ChangeEvent, useRef, FC, useContext } from "react";
 import {
-  Box, Typography, FormControlLabel, Switch, Tabs, Tab, TextField, IconButton,
-  InputAdornment, Avatar, List, Button, Tooltip, Divider, AvatarGroup,
-  ListItemButton, ListItemAvatar, ListItemText, lighten, ListItem, Popover, ListSubheader
-} from '@mui/material';
+  Box,
+  Typography,
+  FormControlLabel,
+  Switch,
+  Tabs,
+  Tab,
+  TextField,
+  IconButton,
+  InputAdornment,
+  Avatar,
+  List,
+  Button,
+  Tooltip,
+  Divider,
+  AvatarGroup,
+  ListItemButton,
+  ListItemAvatar,
+  ListItemText,
+  lighten,
+  ListItem,
+  Popover,
+  ListSubheader,
+} from "@mui/material";
 
-import { styled } from '@mui/material/styles';
-import { formatDistance, subMinutes, subHours, format, isToday } from 'date-fns';
-import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone';
-import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
-import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
-import AlarmTwoToneIcon from '@mui/icons-material/AlarmTwoTone';
-import { Link as RouterLink, NavLink } from 'react-router-dom';
-import { useAppSelector, useAuthStore } from '../../hooks';
-import { selectChat, setChatActivo } from '../../store/slices/chat';
-import { useAppDispatch } from '../../hooks/useRedux';
-import { IUsuario } from '../../interfaces';
+import { styled } from "@mui/material/styles";
+import {
+  formatDistance,
+  subMinutes,
+  subHours,
+  format,
+  isToday,
+} from "date-fns";
+import SettingsTwoToneIcon from "@mui/icons-material/SettingsTwoTone";
+import SearchTwoToneIcon from "@mui/icons-material/SearchTwoTone";
+import CheckTwoToneIcon from "@mui/icons-material/CheckTwoTone";
+import AlarmTwoToneIcon from "@mui/icons-material/AlarmTwoTone";
+import { Link as RouterLink, NavLink } from "react-router-dom";
+import { useAppSelector, useAuthStore, useSocket } from "../../hooks";
+import { selectChat, setChatActivo } from "../../store/slices/chat";
+import { useAppDispatch } from "../../hooks/useRedux";
+import { IUsuario } from "../../interfaces";
 
-import { HeaderSidebar, Label } from '../ui';
-import { useChatStore } from '../../hooks/useChatStore';
-import { scrollToBottom } from '../../helpers/scrollToBottom';
-
-
+import { HeaderSidebar, Label } from "../ui";
+import { useChatStore } from "../../hooks/useChatStore";
+import { scrollToBottom } from "../../helpers/scrollToBottom";
+import { SocketContext } from "../../context/SocketContext";
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
@@ -91,34 +115,30 @@ interface Props {
 }
 
 export const SidebarContent: FC<Props> = ({ handleClose }) => {
-
   const ref = useRef<any>(null);
 
   const { usuario } = useAuthStore();
   const { chatActivo } = useChatStore();
   const { usuarios } = useAppSelector(selectChat);
+  const { online} = useContext(SocketContext);
 
   const dispatch = useAppDispatch();
 
-
-
   const [state, setState] = useState({
-    invisible: true
+    invisible: true,
   });
-
-
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
-      [event.target.name]: event.target.checked
+      [event.target.name]: event.target.checked,
     });
   };
 
-  const [currentTab, setCurrentTab] = useState<string>('todo');
+  const [currentTab, setCurrentTab] = useState<string>("todo");
 
   const tabs = [
-    { value: 'todo', label: 'Todos' },
+    { value: "todo", label: "Todos" },
     // { value: 'unread', label: 'Unread' },
     // { value: 'archived', label: 'Archived' }
   ];
@@ -130,8 +150,8 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
   const activarChat = (usuario: IUsuario) => {
     dispatch(setChatActivo(usuario));
     handleClose();
-    scrollToBottom('mensajes')
-  }
+    scrollToBottom("mensajes");
+  };
 
   return (
     <RootWrapper>
@@ -152,10 +172,10 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
       /> */}
 
       <Typography sx={{ mb: 1, mt: 2 }} variant="h3">
-        Chats
+        Chats 
       </Typography>
 
-      <TabsContainerWrapper>
+      {/* <TabsContainerWrapper>
         <Tabs
           onChange={handleTabsChange}
           value={currentTab}
@@ -168,119 +188,115 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
             <Tab key={tab.value} label={tab.label} value={tab.value} />
           ))}
         </Tabs>
-      </TabsContainerWrapper>
+      </TabsContainerWrapper> */}
 
       <Box mt={2}>
-
-        {currentTab === 'todo' && (
+        {currentTab === "todo" && (
           <>
             <List disablePadding component="div">
-              {
-                usuarios!.length > 0 && usuarios?.filter(u => u.uid !== usuario!.uid).map(u => (
+              {usuarios!.length > 0 &&
+                usuarios
+                  ?.filter((u) => u.uid !== usuario!.uid)
+                  .map((u) => (
+                    <ListItemWrapper
+                      key={u.uid}
+                      onClick={() => activarChat(u)}
+                      selected={u.uid === chatActivo?.uid}
+                    >
+                      <ListItemAvatar>
+                        <Avatar src={u.avatar} />
+                      </ListItemAvatar>
+                      <ListItemText
+                        sx={{ mr: 1 }}
+                        primaryTypographyProps={{
+                          color: "textPrimary",
+                          variant: "h5",
+                          noWrap: true,
+                        }}
+                        secondaryTypographyProps={{
+                          color: "textSecondary",
+                          noWrap: true,
+                        }}
+                        primary={u.nombre}
+                        secondary={u.mensaje.mensaje}
+                      />
 
-                  <ListItemWrapper key={u.uid} onClick={() => activarChat(u)} selected={u.uid === chatActivo?.uid}>
-                    <ListItemAvatar>
-                      <Avatar src={u.avatar} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      sx={{ mr: 1 }}
-                      primaryTypographyProps={{
-                        color: 'textPrimary',
-                        variant: 'h5',
-                        noWrap: true
-                      }}
-                      secondaryTypographyProps={{
-                        color: 'textSecondary',
-                        noWrap: true
-                      }}
-                      primary={u.nombre}
-                      secondary={u.mensaje.mensaje}
-                    />
-
-                    <ListItemText
-                      primaryTypographyProps={{
-                        fontSize: '12px',
-                        align: 'right'
-                      }}
-                      secondaryTypographyProps={{
-                        align: 'right'
-                      }}
-
-                      primary={
-                        u.mensaje._id
-                          ?
-                          isToday(new Date(u.mensaje?.createdAt))
-                            ? format(new Date(u.mensaje?.createdAt), 'HH:mm')
-                            : format(new Date(u.mensaje?.createdAt), 'dd MMM yyyy')
-
-                          : ''
-                      }
-
-                      secondary={u.cantidadMensajes > 0 && <Label color="success" >
-                        <b>{u.cantidadMensajes}</b>
-                      </Label>}
-
-                    />
-
-
-
-                  </ListItemWrapper>
-                )
-                )
-
-              }
+                      <ListItemText
+                        primaryTypographyProps={{
+                          fontSize: "12px",
+                          align: "right",
+                        }}
+                        secondaryTypographyProps={{
+                          align: "right",
+                        }}
+                        primary={
+                          u.mensaje._id
+                            ? isToday(new Date(u.mensaje?.createdAt))
+                              ? format(new Date(u.mensaje?.createdAt), "HH:mm")
+                              : format(
+                                  new Date(u.mensaje?.createdAt),
+                                  "dd MMM yyyy"
+                                )
+                            : ""
+                        }
+                        secondary={
+                          u.cantidadMensajes > 0 && (
+                            <Label color="success">
+                              <b>{u.cantidadMensajes}</b>
+                            </Label>
+                          )
+                        }
+                      />
+                    </ListItemWrapper>
+                  ))}
             </List>
-
           </>
-
         )}
-        {currentTab === 'unread' && (
+        {currentTab === "unread" && (
           <List disablePadding component="div">
-            {
-              usuarios!.length > 0 && usuarios?.filter(u => u.uid !== usuario!.uid)
-                .filter(u => u.cantidadMensajes > 0)
-                .map(u => (
-
-                  <ListItemWrapper key={u.uid} onClick={() => activarChat(u)} selected={u.uid === chatActivo?.uid}>
+            {usuarios!.length > 0 &&
+              usuarios
+                ?.filter((u) => u.uid !== usuario!.uid)
+                .filter((u) => u.cantidadMensajes > 0)
+                .map((u) => (
+                  <ListItemWrapper
+                    key={u.uid}
+                    onClick={() => activarChat(u)}
+                    selected={u.uid === chatActivo?.uid}
+                  >
                     <ListItemAvatar>
                       <Avatar src={u.avatar} />
                     </ListItemAvatar>
                     <ListItemText
                       sx={{ mr: 1 }}
                       primaryTypographyProps={{
-                        color: 'textPrimary',
-                        variant: 'h5',
-                        noWrap: true
+                        color: "textPrimary",
+                        variant: "h5",
+                        noWrap: true,
                       }}
                       secondaryTypographyProps={{
-                        color: 'textSecondary',
-                        noWrap: true
+                        color: "textSecondary",
+                        noWrap: true,
                       }}
                       primary={u.nombre}
                       secondary={u.mensaje.mensaje}
                     />
-                    {
-
-                      u.cantidadMensajes > 0 && <Label color="secondary">
+                    {u.cantidadMensajes > 0 && (
+                      <Label color="secondary">
                         <b>{u.cantidadMensajes}</b>
                       </Label>
-                    }
+                    )}
                   </ListItemWrapper>
-                )
-                )
-
-            }
+                ))}
           </List>
-
-
         )}
-        {currentTab === 'archived' && (
+        {currentTab === "archived" && (
           <Box pb={3}>
             <Divider sx={{ mb: 3 }} />
             <AvatarSuccess>
               <CheckTwoToneIcon />
             </AvatarSuccess>
-            <Typography sx={{ mt: 2, textAlign: 'center' }} variant="subtitle2">
+            <Typography sx={{ mt: 2, textAlign: "center" }} variant="subtitle2">
               Hurray! There are no archived chats!
             </Typography>
             <Divider sx={{ mt: 3 }} />
@@ -288,13 +304,11 @@ export const SidebarContent: FC<Props> = ({ handleClose }) => {
         )}
       </Box>
 
-
       <Box sx={{ mt: 3, mb: 2 }}>
-        <Typography variant="h5" align='center'>Desarrollado por Santiago Quirumbay</Typography>
-
+        <Typography variant="h5" align="center">
+          Desarrollado por Santiago Quirumbay
+        </Typography>
       </Box>
-
-    </RootWrapper >
+    </RootWrapper>
   );
-}
-
+};

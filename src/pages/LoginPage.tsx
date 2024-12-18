@@ -1,106 +1,123 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from "react";
 
-
-import { Grid, Box, TextField, Typography, FormControl, FormLabel, FormHelperText, Button, Link, Paper, Avatar, FormControlLabel, Checkbox, Chip } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import {
+  Grid,
+  Box,
+  TextField,
+  Typography,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  Button,
+  Link,
+  Paper,
+  Avatar,
+  FormControlLabel,
+  Checkbox,
+  Chip,
+} from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 // import { authError, selectAuth, startLogin } from '../reducers';
 // import { useAppDispatch } from '../app/hooks';
 
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 // import { useAppSelector } from '../hooks/useRedux';
-import { useForm } from '../hooks/useForm';
-import { useAuthStore } from '../hooks';
-
-
-
+import { useForm } from "../hooks/useForm";
+import { useAuthStore } from "../hooks";
 
 const initialForm = {
-  email: '@gmail.com',
-  password: '1234',
-  rememberme: true
-}
+  email: "@gmail.com",
+  password: "1234",
+  rememberme: true,
+};
 
 interface FormData {
   email: string;
   password: string;
-  rememberme: boolean
+  rememberme: boolean;
 }
 
 function Copyright(props: any) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
+      {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Santiago Quirumbay
-      </Link>{' '}
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
 
-
 export const LoginPage = () => {
+  const { values, handleInputChange, handleInputChecked, reset } =
+    useForm<FormData>(initialForm);
 
-
-  const { values, handleInputChange, handleInputChecked, reset } = useForm<FormData>(initialForm);
-
-  const { startLogin, error} = useAuthStore();
-
-
+  const { startLogin, error } = useAuthStore();
 
   /*  const dispatch = useAppDispatch();
  
    const { error, logged } = useAppSelector(selectAuth);
   */
   const handleLogin = () => {
-
-
     startLogin(values.email, values.password);
-
-  }
-
+  };
 
   return (
     <>
-      <Box >
-        <Grid p={0} m={0} container component="main" sx={{ height: '100vh' }}>
+      <Box>
+        <Grid p={0} m={0} container component="main" sx={{ height: "100vh" }}>
           <Grid
             item
             xs={false}
             sm={4}
             md={7}
             sx={{
-              backgroundImage: 'url(https://source.unsplash.com/random)',
-              backgroundRepeat: 'no-repeat',
+              backgroundImage: "url(https://source.unsplash.com/random)",
+              backgroundRepeat: "no-repeat",
               backgroundColor: (t) =>
-                t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+                t.palette.mode === "light"
+                  ? t.palette.grey[50]
+                  : t.palette.grey[900],
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}
           />
-          <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Grid
+            item
+            xs={12}
+            sm={8}
+            md={5}
+            component={Paper}
+            elevation={6}
+            square
+          >
             <Box
               sx={{
                 my: 8,
                 mx: 4,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
-               <Chip
+              <Chip
                 label={error}
                 color="error"
                 sx={{ display: !!error ? "flex" : "none" }}
-
               />
               <Box component="form" noValidate sx={{ mt: 1 }}>
                 <TextField
@@ -108,12 +125,9 @@ export const LoginPage = () => {
                   required
                   fullWidth
                   label="Email"
-                  name='email'
+                  name="email"
                   value={values.email}
                   onChange={handleInputChange}
-
-
-
                   autoFocus
                 />
                 <TextField
@@ -122,22 +136,19 @@ export const LoginPage = () => {
                   fullWidth
                   label="Password"
                   type="password"
-                  name='password'
+                  name="password"
                   value={values.password}
                   onChange={handleInputChange}
-
-
-
                 />
                 <FormControlLabel
-
                   control={
                     <Checkbox
-                      name='rememberme'
+                      name="rememberme"
                       checked={values.rememberme}
                       onChange={handleInputChecked}
                       color="primary"
-                    />}
+                    />
+                  }
                   label={"Remember me "}
                 />
                 <Button
@@ -147,9 +158,8 @@ export const LoginPage = () => {
                   sx={{ mt: 3, mb: 2 }}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleLogin()
-                  }
-                  }
+                    handleLogin();
+                  }}
                 >
                   Sign In
                 </Button>
@@ -160,7 +170,7 @@ export const LoginPage = () => {
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link to="/auth/signup" variant="body2" component={NavLink} >
+                    <Link to="/auth/signup" variant="body2" component={NavLink}>
                       {"No tienes una cuenta? Regístrate"}
                     </Link>
                   </Grid>
@@ -169,11 +179,8 @@ export const LoginPage = () => {
               </Box>
             </Box>
           </Grid>
-
         </Grid>
       </Box>
-
     </>
-  )
-}
-
+  );
+};

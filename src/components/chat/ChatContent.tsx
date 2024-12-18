@@ -1,23 +1,27 @@
-import { useEffect, useContext, useRef, useLayoutEffect } from 'react';
+import { useEffect, useContext, useRef, useLayoutEffect } from "react";
 
-import { Box, Avatar, Typography, Card, Divider, IconButton } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import {
+  Box,
+  Avatar,
+  Typography,
+  Card,
+  Divider,
+  IconButton,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-
-import RefreshIcon from '@mui/icons-material/Refresh';
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import {
   formatDistance,
   format,
   subDays,
   subHours,
-  subMinutes
-} from 'date-fns';
-import { useChatStore } from '../../hooks';
-import { IncomingMessage, OutgoingMessage } from './';
-import { SocketContext } from '../../context/SocketContext';
-
-
+  subMinutes,
+} from "date-fns";
+import { useChatStore } from "../../hooks";
+import { IncomingMessage, OutgoingMessage } from "./";
+import { SocketContext } from "../../context/SocketContext";
 
 const DividerWrapper = styled(Divider)(
   ({ theme }) => `
@@ -56,10 +60,7 @@ const CardWrapperSecondary = styled(Card)(
 );
 // const useMountEffect = fun => useEffect(fun, []);
 
-
 export const ChatContent = () => {
-
-
   const { chatActivo, mensajes, onLoadMensajes } = useChatStore();
 
   //const {scrollX, scrollY} = useWindowPosition();
@@ -68,76 +69,59 @@ export const ChatContent = () => {
 
   const messageRef = useRef();
 
-
-
   useEffect(() => {
     onLoadMensajes();
-    socket?.emit('mensajes-leidos', chatActivo?.uid);
+    socket?.emit("mensajes-leidos", chatActivo?.uid);
     if (messageRef.current) {
-      messageRef.current!.scrollIntoView(false)
+      messageRef.current!.scrollIntoView(false);
     }
-
-
   }, [chatActivo?.uid]);
 
-
   useEffect(() => {
-
     if (messageRef.current) {
-
       messageRef.current!.scrollIntoView({
-        behavior: 'smooth',
-        block: 'end',
-        inline: 'nearest'
-      })
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
     }
-
   }, [mensajes]);
 
-/*   useMountEffect(() => messageRef.current!.scrollIntoView(false))
- *//*   useLayoutEffect(() => {
+  /*   useMountEffect(() => messageRef.current!.scrollIntoView(false))
+   */ /*   useLayoutEffect(() => {
   
   }, [])
  */
 
   return (
+    <Box py={3} px={1} ref={messageRef}>
+      {mensajes.length > 3 && (
+        <DividerWrapper>
+          <IconButton>
+            <RefreshIcon />
+          </IconButton>
 
-    <Box py={3} px={1} ref={messageRef} >
-      {
-        mensajes.length > 3 && (
-          <DividerWrapper>
-            <IconButton>
-              <RefreshIcon />
-            </IconButton>
-
-            {/* {format(subDays(new Date(), 3), 'MMMM dd yyyy')} */}
-          </DividerWrapper>
-
-        )
-      }
-
+          {/* {format(subDays(new Date(), 3), 'MMMM dd yyyy')} */}
+        </DividerWrapper>
+      )}
 
       <>
-        {
-          mensajes.length > 0 && mensajes.map(msg =>
-            (msg.de === chatActivo!.uid)
-              ? <IncomingMessage key={msg._id} mensaje={msg} />
-              : <OutgoingMessage key={msg._id} mensaje={msg} />
-          )
-        }
+        {mensajes.length > 0 &&
+          mensajes.map((msg) =>
+            msg.de === chatActivo!.uid ? (
+              <IncomingMessage key={msg._id} mensaje={msg} />
+            ) : (
+              <OutgoingMessage key={msg._id} mensaje={msg} />
+            )
+          )}
       </>
 
-
-
-
-     {/*  <DividerWrapper>
+      {/*  <DividerWrapper>
         {format(subDays(new Date(), 5), 'MMMM dd yyyy')}
       </DividerWrapper>
 
       <DividerWrapper>Today</DividerWrapper>
  */}
-
-    </Box >
+    </Box>
   );
-}
-
+};

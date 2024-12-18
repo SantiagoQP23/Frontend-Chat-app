@@ -1,21 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
-import { BottomBarContent, SidebarContent, ChatContent, TopBarContent } from '../components/chat';
+import {
+  BottomBarContent,
+  SidebarContent,
+  ChatContent,
+  TopBarContent,
+} from "../components/chat";
 
-import { Scrollbars } from 'react-custom-scrollbars-2';
+import { Scrollbars } from "react-custom-scrollbars-2";
 
-import { Box, Drawer, IconButton, Divider } from '@mui/material';
-import { styled, useTheme } from '@mui/material/styles';
-import { Layout } from '../components/layouts';
-import { useAppDispatch, useAppSelector } from '../hooks/useRedux';
-import { ChatSelect } from '../components/chat/ChatSelect';
-import { selectChat } from '../store/slices/chat';
+import { Box, Drawer, IconButton, Divider } from "@mui/material";
+import { styled, useTheme } from "@mui/material/styles";
+import { Layout } from "../components/layouts";
+import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
+import { ChatSelect } from "../components/chat/ChatSelect";
+import { selectChat } from "../store/slices/chat";
 
-import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
-import { Scrollbar } from '../components/ui';
-import { onCargarUsuarios } from '../store/slices/auth/thunks';
-import { Element } from 'react-scroll';
-
+import MenuTwoToneIcon from "@mui/icons-material/MenuTwoTone";
+import { Scrollbar } from "../components/ui";
+import { onCargarUsuarios } from "../store/slices/auth/thunks";
+import { Element } from "react-scroll";
 
 const RootWrapper = styled(Box)(
   ({ theme }) => `
@@ -24,10 +28,10 @@ const RootWrapper = styled(Box)(
 `
 );
 
+// background: ${theme.colors.alpha.white[100]};
 const Sidebar = styled(Box)(
   ({ theme }) => `
         width: 350px;
-        background: ${theme.colors.alpha.white[100]};
         border-right: ${theme.colors.alpha.black[10]} solid 1px;
 `
 );
@@ -41,16 +45,15 @@ const ChatWindow = styled(Box)(
         flex: 1;
 `
 );
+// background: ${theme.colors.alpha.white[100]};
 
 const ChatTopBar = styled(Box)(
   ({ theme }) => `
-        background: ${theme.colors.alpha.white[100]};
         border-bottom: ${theme.colors.alpha.black[10]} solid 1px;
         padding: ${theme.spacing(2)};
         align-items: center;
 `
 );
-
 
 const ChatBottomBar = styled(Box)(
   ({ theme }) => `
@@ -66,7 +69,6 @@ const IconButtonToggle = styled(IconButton)(
 `
 );
 
-
 const DrawerWrapperMobile = styled(Drawer)(
   () => `
     width: 340px;
@@ -78,7 +80,6 @@ const DrawerWrapperMobile = styled(Drawer)(
   }
 `
 );
-
 
 export const ChatPage = () => {
   const theme = useTheme();
@@ -94,50 +95,38 @@ export const ChatPage = () => {
   };
 
   useEffect(() => {
-    dispatch(onCargarUsuarios())
-
-
-  }, [])
-  
-
-
-
+    dispatch(onCargarUsuarios());
+  }, []);
 
   return (
     <>
-
       <RootWrapper className="Mui-FixedWrapper">
         <DrawerWrapperMobile
           sx={{
-            display: { lg: 'none', xs: 'inline-block' }
+            display: { lg: "none", xs: "inline-block" },
           }}
           variant="temporary"
-          anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+          anchor={theme.direction === "rtl" ? "right" : "left"}
           open={mobileOpen}
           onClose={handleDrawerToggle}
         >
           <Scrollbar>
-            <SidebarContent handleClose={handleDrawerToggle}/>
+            <SidebarContent handleClose={handleDrawerToggle} />
           </Scrollbar>
         </DrawerWrapperMobile>
 
-        <Sidebar
-          sx={{ display: { xs: 'none', lg: 'inline-block' } }}
-        >
-          <Scrollbar >
-            <SidebarContent handleClose={handleDrawerToggle}/>
+        <Sidebar sx={{ display: { xs: "none", lg: "inline-block" } }}>
+          <Scrollbar>
+            <SidebarContent handleClose={handleDrawerToggle} />
           </Scrollbar>
         </Sidebar>
 
-        
         <ChatWindow>
-          <ChatTopBar
-            sx={{ display: { xs: 'flex', lg: 'inline-block' } }}
-          >
+          <ChatTopBar sx={{ display: { xs: "flex", lg: "inline-block" } }}>
             <IconButtonToggle
               sx={{
-                display: { lg: 'none', xs: 'flex' },
-                mr: 2
+                display: { lg: "none", xs: "flex" },
+                mr: 2,
               }}
               color="primary"
               onClick={handleDrawerToggle}
@@ -145,31 +134,17 @@ export const ChatPage = () => {
             >
               <MenuTwoToneIcon />
             </IconButtonToggle>
-            {
-              chatActivo && <TopBarContent />
-            }
+            {chatActivo && <TopBarContent />}
           </ChatTopBar>
           <Box flex={1}>
-            <Scrollbar >
-              
-
-              {
-                chatActivo
-                ? <ChatContent />
-                : <ChatSelect />
-                
-              }
-             
+            <Scrollbar>
+              {chatActivo ? <ChatContent /> : <ChatSelect />}
             </Scrollbar>
           </Box>
           <Divider />
-          {
-            chatActivo && <BottomBarContent />
-
-          }
+          {chatActivo && <BottomBarContent />}
         </ChatWindow>
       </RootWrapper>
     </>
   );
-}
-
+};

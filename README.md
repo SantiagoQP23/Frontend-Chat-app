@@ -1,18 +1,33 @@
 # Frontend-Chat-app
-Mi aplicación de chat es una plataforma de mensajería en línea que permite a los usuarios comunicarse entre sí de manera rápida y sencilla. Diseñada con una interfaz limpia y moderna, la aplicación ofrece una variedad de funciones de chat, incluyendo la capacidad de enviar mensajes de texto y editar el perfil del usuario.
+This application allows users to exchange messages in real time.
 
-### Diseño en pc
-![image](https://user-images.githubusercontent.com/44738574/224335938-7499afd1-38bd-4074-85ea-b7bb3f6a2fb1.png)
+Know more about this project in this blog page, and don't forget to leave a start.
 
-### Chats
-![image](https://user-images.githubusercontent.com/44738574/224335107-a3cd69b4-6c3d-4b44-9a25-6e459d0cfced.png)
+## Getting started
+### Prerequisites
+- Nodejs
 
+### Installing
 
-### Chat 
-![image](https://user-images.githubusercontent.com/44738574/224335500-d15465a8-ae50-4885-95ce-5c32ef77a358.png)
+1. Run server [chat-app-backend](https://github.com/SantiagoQP23/Chat-app-backend)
+2. Clone the project in a preferred location and then get into the project
+```
+  git clone https://github.com/SantiagoQP23/Chat-app-backend.git
+  cd Chat-app-backend
+```
+3. Create a copy of the `.env.template` file and rename it to `.env`. Assign values to each variable.
+4. Install dependencies
+```
+  npm install
+```
+5. Run local server
+```
+  npm run start
+```
 
-
-### Perfil de usuario
-![image](https://user-images.githubusercontent.com/44738574/224335611-1828b3f6-8821-4953-a5a6-9eb04b1f51de.png)
+## Built with
+- ReactJs
+- redux
+- socket-io
 
 

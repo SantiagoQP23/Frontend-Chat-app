@@ -1,9 +1,8 @@
-import { FC } from 'react';
-import { Box, Typography, Card, styled } from '@mui/material';
-import ScheduleTwoToneIcon from '@mui/icons-material/ScheduleTwoTone';
-import { format, formatDistance, subHours } from 'date-fns';
-import { IMensaje } from '../../interfaces';
-
+import { FC } from "react";
+import { Box, Typography, Card, styled } from "@mui/material";
+import ScheduleTwoToneIcon from "@mui/icons-material/ScheduleTwoTone";
+import { format, formatDistance, subHours } from "date-fns";
+import { IMensaje } from "../../interfaces";
 
 const CardWrapperSecondary = styled(Card)(
   ({ theme }) => `
@@ -18,11 +17,9 @@ const CardWrapperSecondary = styled(Card)(
 `
 );
 
-
 interface Props {
   mensaje: IMensaje;
 }
-
 
 export const IncomingMessage: FC<Props> = ({ mensaje }) => {
   return (
@@ -47,12 +44,9 @@ export const IncomingMessage: FC<Props> = ({ mensaje }) => {
       >
         <CardWrapperSecondary>
           {mensaje.mensaje}
-          <Typography fontSize={10} align='right'>
-            {
-              format(new Date(mensaje.createdAt), 'dd MMM yyyy HH:mm')
-            }
+          <Typography fontSize={10} align="right">
+            {format(new Date(mensaje.createdAt), "dd MMM yyyy HH:mm")}
           </Typography>
-
         </CardWrapperSecondary>
         {/*  <Typography
             variant="subtitle1"
@@ -65,5 +59,5 @@ export const IncomingMessage: FC<Props> = ({ mensaje }) => {
           </Typography> */}
       </Box>
     </Box>
-  )
-}
+  );
+};

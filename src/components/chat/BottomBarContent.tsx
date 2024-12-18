@@ -1,19 +1,32 @@
 import {
-  Card, Avatar, Tooltip, IconButton, Box, Button, Hidden,
-  TextField, Divider, InputBase
-} from '@mui/material';
+  Card,
+  Avatar,
+  Tooltip,
+  IconButton,
+  Box,
+  Button,
+  Hidden,
+  TextField,
+  Divider,
+  InputBase,
+} from "@mui/material";
 
-import { styled, useTheme } from '@mui/material/styles';
-import AttachFileTwoToneIcon from '@mui/icons-material/AttachFileTwoTone';
-import SendTwoToneIcon from '@mui/icons-material/SendTwoTone';
-import { ChangeEvent, useContext, useState } from 'react';
-import { useAppSelector } from '../../hooks';
-import { useAuthStore } from '../../hooks/useAuthStore';
-import { addMensaje, mensajeEnviado, nuevoMensaje, selectChat } from '../../store/slices/chat';
-import { SocketContext } from '../../context/SocketContext';
-import { IMensaje } from '../../interfaces';
-import { useAppDispatch } from '../../hooks/useRedux';
-import { scrollToBottom, scrollToBottomAnimated } from '../../helpers';
+import { styled, useTheme } from "@mui/material/styles";
+import AttachFileTwoToneIcon from "@mui/icons-material/AttachFileTwoTone";
+import SendTwoToneIcon from "@mui/icons-material/SendTwoTone";
+import { ChangeEvent, useContext, useState } from "react";
+import { useAppSelector } from "../../hooks";
+import { useAuthStore } from "../../hooks/useAuthStore";
+import {
+  addMensaje,
+  mensajeEnviado,
+  nuevoMensaje,
+  selectChat,
+} from "../../store/slices/chat";
+import { SocketContext } from "../../context/SocketContext";
+import { IMensaje } from "../../interfaces";
+import { useAppDispatch } from "../../hooks/useRedux";
+import { scrollToBottom, scrollToBottomAnimated } from "../../helpers";
 
 const MessageInputWrapper = styled(InputBase)(
   ({ theme }) => `
@@ -23,78 +36,78 @@ const MessageInputWrapper = styled(InputBase)(
 `
 );
 
-const Input = styled('input')({
-  display: 'none'
+const Input = styled("input")({
+  display: "none",
 });
 
-
 export const BottomBarContent = () => {
-
-  const [mensaje, setMensaje] = useState<string>('');
+  const [mensaje, setMensaje] = useState<string>("");
 
   const theme = useTheme();
-
 
   const { usuario } = useAuthStore();
 
   const { chatActivo } = useAppSelector(selectChat);
 
-  const { socket } = useContext(SocketContext);
+  const { socket, online } = useContext(SocketContext);
   const dispatch = useAppDispatch();
 
-  const user =
-  {
-    name: 'Catherine Pike',
-    avatar: '/static/images/avatars/1.jpg'
+  const user = {
+    name: "Catherine Pike",
+    avatar: "/static/images/avatars/1.jpg",
   };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMensaje(event.target.value);
-
-  }
+  };
 
   const onSubmit = () => {
-    
-
-    if (mensaje.length === 0) { return; }
+    if (mensaje.length === 0) {
+      return;
+    }
+    console.log("Enviando mensaje", mensaje, online);
 
     socket?.emit(
-      'mensaje-personal',
+      "mensaje-personal",
       {
-        de: usuario?.uid, para: chatActivo?.uid, mensaje
+        de: usuario?.uid,
+        para: chatActivo?.uid,
+        mensaje,
       },
       ({ newMensaje }: { newMensaje: IMensaje }) => {
         if (newMensaje) {
-          setMensaje('');
+          setMensaje("");
 
           dispatch(addMensaje(newMensaje));
           dispatch(mensajeEnviado(newMensaje));
           scrollToBottomAnimated(newMensaje._id);
-
         }
         // TODO dispatch del mensaje creado
-      });
-
-
-  }
+      }
+    );
+  };
 
   return (
     <Box
       sx={{
-        background: theme.colors.alpha.white[50],
-        display: 'flex',
-        alignItems: 'center',
-        p: 1
+        // background: theme.colors.alpha.white[50],
+        display: "flex",
+        alignItems: "center",
+        p: 1,
       }}
     >
-
-
-      <Box component='form' flexGrow={1} display="flex" alignItems="center" onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}>
+      <Box
+        component="form"
+        flexGrow={1}
+        display="flex"
+        alignItems="center"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
         <Avatar
-          sx={{ display: { xs: 'none', sm: 'flex' }, mr: 1 }}
+          sx={{ display: { xs: "none", sm: "flex" }, mr: 1 }}
           alt={usuario!.nombre}
           src={usuario!.avatar}
         />
@@ -104,11 +117,10 @@ export const BottomBarContent = () => {
           fullWidth
           value={mensaje}
           onChange={onChange}
-          
         />
       </Box>
       <Box>
-     {/*    <Tooltip arrow placement="top" title="Choose an emoji. Coming soon."  >
+        {/*    <Tooltip arrow placement="top" title="Choose an emoji. Coming soon."  >
           <IconButton
             sx={{ fontSize: theme.typography.pxToRem(16) }}
             color="primary"
@@ -116,10 +128,15 @@ export const BottomBarContent = () => {
             😀
           </IconButton>
         </Tooltip> */}
-        <Input accept="image/*" id="messenger-upload-file" type="file" disabled/>
+        <Input
+          accept="image/*"
+          id="messenger-upload-file"
+          type="file"
+          disabled
+        />
         <Tooltip arrow placement="top" title="Attach a file. Coming soon.">
           <label htmlFor="messenger-upload-file">
-            <IconButton  color="primary" component="span" disabled>
+            <IconButton color="primary" component="span" disabled>
               <AttachFileTwoToneIcon fontSize="small" />
             </IconButton>
           </label>
@@ -127,14 +144,12 @@ export const BottomBarContent = () => {
         <Button
           variant="contained"
           onClick={onSubmit}
-          type='submit'
-          size='small'
+          type="submit"
+          size="small"
         >
           <SendTwoToneIcon />
         </Button>
       </Box>
     </Box>
-
   );
-}
-
+};
